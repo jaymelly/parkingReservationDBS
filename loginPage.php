@@ -8,14 +8,21 @@
 <body>
     <h1>Login</h1>
 
-    <form method="post" action="index.php">
+    <form method="post" action="">
         <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
+        <input type="text" name="username" required>
 
         <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-
+        <input type="password" name="password" required>
         <button type="submit">Login</button>
     </form>
+<?php
+    if ($_POST['username']=="admin" && $_POST['password']=="admin123") {
+        header("Location: admin.php");
+    } else {
+        echo "<br><h2>Invalid username or password. Please try again.<h2>";
+    }
+?>
+
 </body>
 </html>
