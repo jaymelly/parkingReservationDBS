@@ -2,7 +2,7 @@ CREATE DATABASE IF NOT EXISTS cse3241_project;
 USE cse3241_project;
 
 
-CREATE TABLE IF NOT EXISTS ZONE (
+CREATE TABLE IF NOT EXISTS ZONES (
 	Zone_num INT AUTO_INCREMENT,
 	Designated_spots INT,
 	Rate SMALLINT,
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS ZONE (
 );
 
 
-CREATE TABLE IF NOT EXISTS RESERVATION (
+CREATE TABLE IF NOT EXISTS RESERVATIONS (
 	Confirmation_id int not null primary key,
 	Zone_num int,
 	Phone varchar(20),
