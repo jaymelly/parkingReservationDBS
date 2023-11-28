@@ -88,21 +88,31 @@
         	</tbody>
     	</table>          
 		
-			<h2>Create new zone</h2>          
-			<div>
-				<ul>
-					<li>Name: 
-						<input class="search_input" type="text" placeholder="Enter the name of the new zone you want to add" placeholder-style="color: #888888;">
-					</li>
-					<li>Max Spots: 
-						<input class="search_input" type="text" placeholder="Enter the number of designated spots" placeholder-style="color: #888888;">
-					</li>
-					<li>Rate: 
-						<input class="search_input" type="text" placeholder="Enter the normal rate" placeholder-style="color: #888888;">
-					</li>
-				</ul>
-			</div>
-			<button class="search_button">Confirm</button>	
+			<h2>Add new zone</h2>
+			<form method="post">
+    				Name: <input type="text"  name="name" required><br>
+    				Designated Spots: <input type="text"  name="designated_spots" required><br>
+				Rate: <input type="number" name="rate" required><br>
+    				Zone Date: <input type="date" name="zone_date" required><br>
+    				<button type="submit" name="addEntry" class="search_button">Add Entry</button>
+			</form>
+			<?php
+				if (isset($_POST["addEntry"])) {
+					if (isset($_POST["designated_spots"]) && isset($_POST["rate"]) && isset($_POST["zone_date"]) && isset($_POST["name"])) {
+						$designatedSpots = $_POST["designated_spots"];
+						$rate = $_POST["rate"];
+						$zoneDate = $_POST["zone_date"];
+						$name = $_POST["name"];
+						$sql = "INSERT INTO ZONES (Designated_spots, Rate, Spots_taken, Zone_date, Name) VALUES('$designatedSpots', '$rate', '0', '$zoneDate', '$name')";
+						if ($conn->query($sql) === TRUE) {
+							echo "<p>New entry added successfully!</p>";
+							echo '<script type="text/javascript">location.reload(true);</script>';
+						} else {
+							echo "<p>Error: " . $sql . "<br>" . $conn->error . "</p>";
+						}
+					}
+				}
+			?>          
 		</div>
 
 		<div class="card">
