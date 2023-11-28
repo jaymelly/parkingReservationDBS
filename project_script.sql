@@ -32,6 +32,6 @@ CREATE TABLE IF NOT EXISTS DISTANCE(
 );
 
 
-insert into DISTANCE values (1, "Nationwide Arena", 1), (1, "COSI", 4), (1, "Huntington Park", 3), (2, "Nationwide Arena", 2), (2, "COSI", 5), (2, "Huntington Park", 4), (3, "Nationwide Arena", 2), (3, "COSI", 4), (2, "Huntington Park", 2); 
+insert into DISTANCE values (1, "Nationwide Arena", 1), (1, "COSI", 4), (1, "Huntington Park", 3), (2, "Nationwide Arena", 2), (2, "COSI", 5), (1, "Huntington Park", 4), (3, "Nationwide Arena", 2), (3, "COSI", 4), (2, "Huntington Park", 2); 
 load data infile 'reservation' into table reservations;
 load data infile 'zone' into table zones;
