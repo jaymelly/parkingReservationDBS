@@ -33,5 +33,5 @@ CREATE TABLE IF NOT EXISTS DISTANCE(
 
 insert into DISTANCE values (1, "Nationwide Arena", 1), (1, "COSI", 4), (1, "Huntington Park", 3), (2, "Nationwide Arena", 2), (2, "COSI", 5), (1, "Huntington Park", 4), (3, "Nationwide Arena", 2), (3, "COSI", 4), (2, "Huntington Park", 2); 
 ########## CHANGE TO BE FILE PATH NAME ##########
-load data infile 'C:\php\reservation' into table reservations;
-load data infile 'C:\php\zone' into table zones;
+load data infile 'C:\GroupProject\reservation' into table reservations;
+load data infile 'C:\GroupProject\zone' into table zones;
