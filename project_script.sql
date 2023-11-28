@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS ZONES (
 );
 
 
-CREATE TABLE IF NOT EXISTS RESERVATIONS (
+CREATE TABLE IF NOT EXISTS RESERVATIONS1 (
 	Confirmation_id int not null primary key,
 	Zone_num int,
 	Phone varchar(20),
