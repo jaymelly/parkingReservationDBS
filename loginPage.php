@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Login</h1>
-    <!---------------------------------------------------- Admin Login -------------------------------------------------------------------->
+<!---------------------------------------------------- Admin Login -------------------------------------------------------------------->
     <h2>Enter as Admin</h2>
 
     <form method="post" action="">
@@ -21,10 +21,12 @@
 <?php
 $username="";
 $password="";
+// Checks if values are there
 if (isset($_POST['username']) && isset($_POST['password'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
 }
+// Checks if username and password are correct
 if (!empty($username) && !empty($password)) {
     if ($username=="admin" && $password=="admin123") {
         header("Location: admin.php");
