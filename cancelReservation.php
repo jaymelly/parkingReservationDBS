@@ -95,10 +95,10 @@ $newRes;
             alert("Your reservation has been Confirmed! \nPress go back to see your other reservations, or make another reservation to reserve a new spot."); 
         }
         function goBack() {
-            window.location.href = "userInterface.php"; 
+            window.location.href = "UserInterface.php"; 
         }
         function goToNewReservations() {
-            window.location.href = "userInterface.php"; 
+            window.location.href = "UserInterface.php"; 
         }
     </script>
 
