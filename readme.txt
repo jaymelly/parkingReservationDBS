@@ -27,7 +27,7 @@ mysql> create user phpuser@'%' identified with mysql_native_password by 'phpwd';
 
 Query OK, 0 rows affected (0.08 sec)
 
-mysql> grant all on company.* to phpuser@'%';
+mysql> grant all on cse_project3241.* to phpuser@'%';
 
 
 3. Start at index.php
