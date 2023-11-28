@@ -17,11 +17,19 @@
         <button type="submit">Login</button>
     </form>
 <?php
-    if ($_POST['username']=="admin" && $_POST['password']=="admin123") {
+$username="";
+$password="";
+if (isset($_POST['username']) && isset($_POST['password'])) {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+}
+if (!empty($username) && !empty($password)) {
+    if ($username=="admin" && $password=="admin123") {
         header("Location: admin.php");
     } else {
         echo "<br><h2>Invalid username or password. Please try again.<h2>";
     }
+}
 ?>
 
 </body>
