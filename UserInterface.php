@@ -19,6 +19,15 @@
   display: table;
   clear: both;
 }
+
+.vl {
+  border-left: 2px solid black;
+  height: 500px;
+  position: absolute;
+  left: 50%;
+  margin-left: -3px;
+  top: 0;
+}
 </style>
 </head>
 <body>
@@ -75,12 +84,13 @@ if (!empty($input)) {
             echo "<td style=\"border:1px solid\">". $row['RATE']. "</td>";
             //  Checks if user is attempting to reserve date on the same day. If so, it does not display reserve button
             if (date("Y-m-d", strtotime($input)) < date("Y-m-d")) {
-                // Change file name to Jack's Make reservation file name and delete this comment
-                echo "<form method=post action=\"ReserveASpot.php\">";
+                echo "<form method=post action=\"confirmReservation.php\">";
                 echo "<input type='hidden' name='date' value=$date>";
                 echo "<input type='hidden' name='rate' value=$rate>";
                 echo "<td style=\"border:none\"><button name='zone_num' value=$zone>Reserve</button></td>";
                 echo "</form>";
+            } else {
+                echo "<td style=\"border:none\"><button disabled>Reserve</button></td>";
             }
             echo "</tr>";
         }
@@ -89,7 +99,7 @@ if (!empty($input)) {
 }
 ?>
 </div>
-
+<div class="v1"></div>
 <!---------------------------------------------------- Search for your reservations -------------------------------------------------------------------->
 <div class="column">
 <h1>Search for Your Reservation</h1>
@@ -148,9 +158,8 @@ if (!empty($input)) {
                 echo "<td style=\"border:none\"><button disabled>Cancel</button></td>";
             } else {
                 // Send phone or confirmation, mainly confirmation
-                // Change file name to Jacks cancel reservation file name
                 echo "<td style=\"border:1px solid\"></td>";
-                echo "<form method=post action='ReserveASpot.php'>";
+                echo "<form method=post action='cancelReservation.php'>";
                 echo "<td style=\"border:none\"><button name='confirmation_num' value=$confirmation_num>Cancel</button></td>";
             }
             echo "</tr>";
