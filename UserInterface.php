@@ -119,7 +119,7 @@ if (!empty($input)) {
     } else {
 ?>
     <!-- Print table header -->
-    <table style="width:75%">
+    <table style="width:90%">
     <tr>
         <th style="border:1px solid">Phone Number</th>
         <th style="border:1px solid">Date Reserved</th>
@@ -143,7 +143,7 @@ if (!empty($input)) {
             echo "<td style=\"border:1px solid\">". $row['ZONE_NUM']. "</td>";
             echo "<td style=\"border:1px solid\">". $row['CONFIRMATION_NUM']. "</td>";
             // Checks if button is already canceled, if it is then option is disabled and prints cancelled in column
-            if ($row['CANCELLED'] == true) {
+            if ($row['CANCELLED'] == true || date("Y-m-d", strtotime($row['DATE_RESERVED'])) >= date('Y-m-d', strtotime(' - 2 days'))) {
                 echo "<td style=\"border:1px solid\">Cancelled</td>";
                 echo "<td style=\"border:none\"><button disabled>Cancel</button></td>";
             } else {
