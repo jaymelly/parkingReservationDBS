@@ -121,26 +121,30 @@
 				<h4>Adjusting Spots</h4>
 				<form method="post">	
 				<div id="spotChange" class="spotChange-block" style="display: none"></div>
-				<div id="setSpot" style="display:none; margin-top: 15px">
+				<div id="setSpot" style="display:none; margin-top: 10px">
 					<form method="post">	
 						Enter the zone number:
-						<input type="text" id="zoneValue" name="zoneValue">
-						<br>To set a new value:
-						<input type="text" id="spotValue" name="spotValue">
+						<input type="text" id="zoneValue" name="zoneValue" required>
+						<br>Enter the date:
+						<input type="text" id="dateValue" name="dateValue" required>
+						<br>Enter the new number of spots:
+						<input type="text" id="spotValue" name="spotValue" required>
 						<button type="submit" name="submitSpot" class="update_button">Update</button>
 					</form>
 				</div>
 				<?php
 					if (isset($_POST['submitSpot'])) {
-    						if (isset($_POST['zoneValue']) && isset($_POST['spotValue'])) {
+    						if (isset($_POST['zoneValue']) && isset($_POST['dateValue']) && isset($_POST['spotValue'])) {
     							$spotValue = $_POST['spotValue'];
     							$zoneNum = $_POST['zoneValue'];
-							$sql = "UPDATE zone SET Designated_spots = '$spotValue' WHERE Zone_num = '$zoneNum'";
+							$dateValue = $_POST['dateValue'];
+							$sql = "UPDATE zones SET Designated_spots = '$spotValue' WHERE Zone_num = '$zoneNum' AND Zone_date = '$dateValue'";
 							if ($conn -> query($sql) === TRUE) {
-								echo "Spot record updated successfully";
+								echo "Spots record updated successfully";
+								echo '<script type="text/javascript">location.reload(true);</script>';
 							}	
 						} else {
-							echo "Missing 'zoneNum' in the POST data";
+							echo "Missing date in the POST";
 						}
 					}	
 				?>
@@ -148,12 +152,14 @@
 			<div class="action-block">	
 				<h4>Adjusting Rates</h4>
 				<div id="rateChange" class="rateChange-block" style="display: none"></div>
-				<div id="setRate" style="display:none; margin-top: 15px">
+				<div id="setRate" style="display:none; margin-top: 10px">
 					<form method="post">	
 						Enter the zone number:
-						<input type="text" id="zoneValue" name="zoneValue">
-						<br>To set a new value:
-						<input type="text" id="rateValue" name="rateValue">
+						<input type="text" id="zoneValue" name="zoneValue" required>
+						<br>Enter the date:
+						<input type="text" id="dateValue" name="dateValue" required>
+						<br>Enter the new rate:
+						<input type="text" id="rateValue" name="rateValue" required>
 						<button type="submit" name="submitRate" class="update_button">Update</button>
 					</form>
 				</div>
@@ -162,12 +168,14 @@
     						if (isset($_POST['zoneValue']) && isset($_POST['rateValue'])) {
     							$rateValue = $_POST['rateValue'];
     							$zoneNum = $_POST['zoneValue'];
-							$sql = "UPDATE zone SET Rate = '$rateValue' WHERE Zone_num = '$zoneNum'";
+							$dateValue = $_POST['dateValue'];
+							$sql = "UPDATE zones SET Rate = '$rateValue' WHERE Zone_num = '$zoneNum' AND Zone_date = '$dateValue'";
 							if ($conn -> query($sql) === TRUE) {
 								echo "Rate record updated successfully";
+								echo '<script type="text/javascript">location.reload(true);</script>';
 							}	
 						} else {
-							echo "Missing 'zoneNum' in the POST data";
+							echo "Missing date in the POST";
 						}
 					}	
 					
@@ -176,11 +184,42 @@
 		</div>		
 		
 		<div class="card">	
-			<button onclick="showDate()" style="font-size: 20px"71                                 $result = $conn -> query($sql);>Run Report</button>
-			<div id="dateDiv" style="display: none">
-				Pick a specific date
-				<input type="date" id="report-date">
+			<div class="reportDateDiv">
+				Pick a specific date:
+				<form method="post">
+					<input class="date" type="date" id="report-date" name="report-date">
+					<button type="submit" name="submitReportDate" style="font-size: 20px">Run Report</button>
+				</form>
 			</div>
+			<div>
+			<?php
+				if (isset($_POST['submitReportDate'])) {
+					if (isset($_POST['report-date']) && !empty($_POST['report-date'])) {
+					$reportDate = $_POST['report-date'];
+					echo '<p>The Report on ' . $reportDate . ' is following:</p>';
+					$sql = "SELECT Z.Zone_num, Z.Designated_spots, COUNT(R.Confirmation_id), Z.Rate, COUNT(R.Confirmation_id) * Z.Rate FROM zones Z, reservations R WHERE R.Date_reserved = '$reportDate' AND R.Zone_num = Z.Zone_num AND Z.Zone_date = '$reportDate' GROUP BY Z.Zone_num, Z.Designated_spots, Z.Rate";
+					$result = $conn -> query($sql);
+					if (!$result) {
+						die("Error in SQL query: " . $conn->error);
+					}
+
+					echo '<table><thead><tr><th>Zone_num</th><th># of Spots</th><th># of Reservations</th><th>Fee/hour</th><th>Total Revenue</th></tr></thead><tbody>';
+					while ($row = $result -> fetch_row()){
+						echo '<tr>';
+						echo '<td>' . $row[0] . '</td>';	
+						echo '<td>' . $row[1] . '</td>';
+						echo '<td>' . $row[2] . '</td>';
+						echo '<td>' . $row[3] . '</td>';
+						echo '<td>' . $row[4] . '</td>';
+						echo '</tr>';
+					}
+					echo '</tbody></table>';
+					} else {
+						echo '<p>You have to select a date.</p>';
+					}
+				}
+			?>
+			</div>	
 		</div>
 
 	</main>
@@ -191,8 +230,11 @@
             		dateDiv.style.display = "block";
 			dateDiv.style.backgroundColor = "#fff";
 			dateDiv.style.width = "500px";
-        	}
-
+        		dateDiv.style.height = "200px"; // Set the height as needed
+    			dateDiv.style.color = "#333"; // Set the text color
+    			dateDiv.style.border = "1px solid #ccc"; // Add a border
+		}
+		
 		function resetSpots() {
 			var startDateInput = document.getElementById('start-date');
 			startDateInput.value = '';

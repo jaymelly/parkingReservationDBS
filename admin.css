@@ -48,6 +48,7 @@ body {
 
 .card:nth-child(3) {
 	grid-area: c3;
+	padding: 10px 30px;
 }
 
 .search_input {
@@ -120,9 +121,14 @@ th {
 	height: 150px;
 	border: 1px solid;
 	border-radius: 10px;
-	margin-bottom: 10px;
+	margin-bottom: 5px;
 	padding-left: 10px;
 }
 
-h4 {
+.reportDateDiv {
+	display: block;
+	backgroundColor: #fff;
+	width: 500px;
+	height: 100px;
+	color: #333;
 }
