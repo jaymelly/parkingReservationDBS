@@ -7,29 +7,29 @@ class Reservation{
     public $fee;
     public $date_reserved;
     public $confirmationNumber;
-    private $local_conn = new mysqli("127.0.0.1", "root", "mySQLmySQL", "ParkingReservations");
+    private $local_conn;
 
 
 
     // Constructor method
-    public function __construct($zone_num, $phone, $date, $rate) {
+    public function __construct($zone_num, $phone, $date, $rate, $conn) {
         $this->zone_num = $zone_num;
         $this->phone = $phone;
-        $this->cancellation = 0;
+        $this->cancellation = false;
         $this->date_reserved = $date;
         $this->fee = $rate;
+        $this->local_conn = $conn;
     }
 
     public function insertReservation(): bool{
        if(isSet($this->zone_num) && isSet($this->phone) && isSet($this->date_reserved)){
-            $this->gcf();
-            $user_reservation_query = 
-            "INSERT INTO RESERVATION(PHONE, CANCELLATION, DATE_RESERVED, FEE, ZONE_NUM, CONFIRMATION_NUM)
-            VALUES('$this->phone', false, '$this->date_reserved', 
-            (SELECT RATE FROM zone WHERE '$this->date_reserved' = zone.date), '$this->confirmationNumber')";
-            $b = $this -> local_conn -> execute_query($user_reservation_query);
-            if($b) echo "<p> Reservation Created Successfully </p>";
-            else echo "<p> Reservation Failed to Create! </p>";
+            
+            $user_reservation_query = sprintf(
+            "INSERT INTO RESERVATION(Confirmation_id, Zone_num, Phone, Cancelled, DATE_RESERVED, FEE)
+            VALUES($this->confirmationNumber, $this->zone_num, $this->phone, false, '$this->date_reserved', 
+            (SELECT RATE FROM ZONE z WHERE '$this->date_reserved' = z.Zone_date AND $this->zone_num = z.Zone_num)");
+            //echo ($user_reservation_query);
+            $b = mysqli_query($this->local_conn, $user_reservation_query);
             return $b;
        } else {
             echo "<p> Reservation Failed to Create! </p>";
@@ -38,14 +38,33 @@ class Reservation{
        return true;
     }
 
+    public function setResConfirm($confirmation_num){
+        $this -> confirmationNumber = $confirmation_num;
+        $resCmd = "SELECT * FROM reservation r WHERE r.Confirmation_id = $confirmation_num";
+        $result = mysqli_query($this->local_conn, $resCmd);
+        if(!$result){
+            die("Error in query preparation: id 47 ");
+        }
+        $values = $result -> fetch_array();
+        $this->date_reserved = $values['DATE_RESERVED'];
+        $this->fee = $values['FEE'];
+        $this->zone_num = $values['ZONE_NUM'];
+        $this->phone = $values['PHONE'];
+
+    }
+
     public function cancelReservation(): bool{
-       $update_cmd =  "UPDATE reservation r SET status = true 
-        WHERE $this->confirmationNumber = r.confirmation_number
-        OR '$this->phone' = r.phone";
-        $b = $this -> local_conn -> execute_query($update_cmd);
-        if($b) echo "<p> Reservation Cancelled successfully! </p>";
-        else echo "<p> Reservation failed to cancel! </p>";
-        return $b;
+       $update_cmd =  "UPDATE RESERVATION r SET Cancelled = true 
+        WHERE $this->confirmationNumber = r.Confirmation_id
+        OR $this->phone = r.Phone";
+
+        echo $update_cmd;
+        $result = mysqli_query($this->local_conn, $update_cmd);
+       
+        if(!$result){
+            die("Error in query preparation: id 57 ");
+        }
+        return $result;
     }
 
 
@@ -58,22 +77,20 @@ class Reservation{
     }
 
 
-    private function gcf(){
+    public function generateUniqueCnf(){
         $count = 1;
         while($count > 0){
             $this->confirmationNumber = rand(0, 2147483647);
-            //Code to check if confirmation number exists. 
-            $query_confirmation_number = "SELECT COUNT(*) AS count
-                FROM reservations
-                WHERE CONFIRMATION_NUM = '$this->confirmationNumber'";
-            $result = $this->local_conn->query($query_confirmation_number);
             
+            $queryConfirmationNumber = sprintf("SELECT COUNT(*) AS count FROM RESERVATION WHERE CONFIRMATION_NUM = %d", $this->confirmationNumber);
+            
+            $result = mysqli_query($this->local_conn, $queryConfirmationNumber);
             if(!$result){
                 die("Error in query preparation: ");
             }
-
-            $row = $result->fetch_assoc();
+            $row = mysqli_fetch_assoc($result);
             $count = $row['count'];
+
         }
     }
 
