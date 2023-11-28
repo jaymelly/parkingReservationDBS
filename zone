@@ -10,3 +10,6 @@
 3	50	4.5	36	2023-12-02 	NorthMarket
 2	100	9	26	2023-12-03 	ShortNorth
 3	50	3.5	39	2023-12-03 	NorthMarket
+
+// VERIFY WITH HENRY THIS IS CORRECT
+load data infile('zone');
