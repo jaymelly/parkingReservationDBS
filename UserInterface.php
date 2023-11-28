@@ -22,11 +22,12 @@
 </style>
 </head>
 <body>
+
 <!---------------------------------------------------- Search for spot to reserve -------------------------------------------------------------------->
 <div class="column">
 <h1>Search for Open Zones</h1>
 <form name="form" action="" method="post">
-    <input type="text" name="user_input_search" size="55" placeholder="Enter admired distance from zone or date in YYYYDDMM format" required>
+    <input type="text" name="user_input_search" onsubmit=true size="55" value="<?= (isset($_POST['user_input_search']) ? $_POST['user_input_search'] : '');?>" placeholder="Enter admired distance from zone or date in YYYYDDMM format" required>
     <input type="submit">
 </form>
 <?php
@@ -88,11 +89,12 @@ if (!empty($input)) {
 }
 ?>
 </div>
+
 <!---------------------------------------------------- Search for your reservations -------------------------------------------------------------------->
 <div class="column">
 <h1>Search for Your Reservation</h1>
 <form name="form" action="" method="post">
-    <input type="text" name="user_input_reservation" size="38" placeholder="Enter Phone Number or Confirmation Number">
+    <input type="text" name="user_input_reservation" onsubmit="return false" size="38" value="<?= (isset($_POST['user_input_reservation']) ? $_POST['user_input_reservation'] : '');?>" placeholder="Enter Phone Number or Confirmation Number">
     <input type="submit">
 </form>
 <?php
@@ -108,8 +110,7 @@ if (isset($_POST['user_input_reservation'])) {
 
 if (!empty($input)) {
     // Gets SQL query results
-    intval($input);
-    $sql = sprintf("select * from RESERVATION where PHONE=%s or CONFIRMATION_NUM=%s", $input, $input);
+    $sql = sprintf("select * from RESERVATION where PHONE=%d or CONFIRMATION_NUM=%d", $input, $input);
     $result = mysqli_query($conn, $sql);
     // Checks if any results. If not, try again
     if (mysqli_num_rows($result)==0) {
@@ -141,13 +142,14 @@ if (!empty($input)) {
             echo "<td style=\"border:1px solid\">". $row['FEE']. "</td>";
             echo "<td style=\"border:1px solid\">". $row['ZONE_NUM']. "</td>";
             echo "<td style=\"border:1px solid\">". $row['CONFIRMATION_NUM']. "</td>";
-            echo "<td style=\"border:1px solid\">". $row['CANCELLED']. "</td>";
-            // Checks if button is already canceled, if it is then option is disabled
-            if ($row['CANCELLED'] == "cancelled") {
+            // Checks if button is already canceled, if it is then option is disabled and prints cancelled in column
+            if ($row['CANCELLED'] == true) {
+                echo "<td style=\"border:1px solid\">Cancelled</td>";
                 echo "<td style=\"border:none\"><button disabled>Cancel</button></td>";
             } else {
                 // Send phone or confirmation, mainly confirmation
                 // Change file name to Jacks cancel reservation file name
+                echo "<td style=\"border:1px solid\"></td>";
                 echo "<form method=post action='ReserveASpot.php'>";
                 echo "<td style=\"border:none\"><button name='confirmation_num' value=$confirmation_num>Cancel</button></td>";
             }
