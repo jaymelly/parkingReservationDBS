@@ -167,7 +167,7 @@ if (!empty($input)) {
                     echo "<td style=\"border:none\"><button disabled>Cancel</button></td>";
                 } else {
                     // Send phone or confirmation, mainly confirmation
-                    echo "<td style=\"border:1px solid\"></td>";
+                    echo "<td style=\"border:1px solid\">Active</td>";
                     echo "<form method=post action='cancelReservation.php'>";
                     echo "<td style=\"border:none\"><button name='confirmation_num' value=$confirmation_num>Cancel</button></td>";
                 }
