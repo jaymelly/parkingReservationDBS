@@ -163,7 +163,7 @@ if (!empty($input)) {
                 echo "<td style=\"border:none\"><button disabled>Cancel</button></td>";
             } else {
                 if (date("Y-m-d", strtotime($row[4])) >= date('Y-m-d', strtotime(' - 2 days'))) {
-                    echo "<td style=\"border:1px solid\"></td>";
+                    echo "<td style=\"border:1px solid\">Active (Past Cancel Date)</td>";
                     echo "<td style=\"border:none\"><button disabled>Cancel</button></td>";
                 } else {
                     // Send phone or confirmation, mainly confirmation
