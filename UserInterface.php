@@ -134,6 +134,7 @@ if (!empty($input)) {
     <!-- Print table header -->
     <table style="width:75%">
     <tr>
+	<th style="border:1px solid">Name</th>
         <th style="border:1px solid">Confirmation_id</th>
         <th style="border:1px solid">Zone_number</th>
         <th style="border:1px solid">Phone</th>
@@ -150,6 +151,7 @@ if (!empty($input)) {
 
             // Prints table information
             echo "<tr>";
+	    echo "<td style=\"border:1px solid\">". $row['NAME']. "</td>";
             echo "<td style=\"border:1px solid\">". $row[0]. "</td>";
             echo "<td style=\"border:1px solid\">". $row[1]. "</td>";
             echo "<td style=\"border:1px solid\">". $row[2]. "</td>";
