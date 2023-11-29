@@ -2,7 +2,6 @@
 include 'reservation.php';
 session_start();
 $phone;
-$newRes;
 ?>
 
 
@@ -18,24 +17,21 @@ $newRes;
     <?php
         //$conn = new mysqli("127.0.0.1", "root", "mySQLmySQL", "ParkingReservations");
         $conn = new mysqli('127.0.0.1', 'phpuser', 'phpwd', 'cse3241_project');
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!empty($_POST['date']) && !empty($_POST['rate']) && !empty($_POST['zone_num'])) {
                 $_SESSION['date'] = $_POST['date'];
                 $_SESSION['zone'] = $_POST['zone_num'];
                 $_SESSION['fee']= $_POST['rate'];  
-                
 
             }
             if(!empty($_POST['phone'])){
                 $phone = $_POST['phone'];
                 $newRes = new Reservation($_SESSION['zone'], $phone, $_SESSION['date'], $_SESSION['fee'], $conn);
-                $newRes -> generateUniqueCnf();
+		$newRes -> generateUniqueCnf();
             }
             $zone = $_SESSION['zone'];
             $fee = $_SESSION['fee'];
             $date = $_SESSION['date'];
-        }
-    ?>
+	?>
 
     <div class="header-container">
         <header class="header">Confirm Reservation</header>
@@ -74,8 +70,8 @@ $newRes;
             if(isset($newRes)){
 
                 $status = $newRes->insertReservation();
-                if($status) echo "<p> Reservation Made successfully! </p>";
-                else echo "<p style=\"color: red;\" > Reservation failed to create! </p>";
+                if($status) {echo "<p> Reservation Made successfully! Confirmation ID: $newRes->confirmationNumber</p>";}
+                else {echo "<p style=\"color: red;\" > Reservation failed to create! ID 99 </p>"; }
             }
         }
        
