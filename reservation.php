@@ -17,18 +17,16 @@ class Reservation{
         $this->phone = $phone;
         $this->cancellation = false;
         $this->date_reserved = $date;
-        $this->fee = $rate;
+	$this->fee = $rate;
         $this->local_conn = $conn;
     }
 
     public function insertReservation(): bool{
-       if(isSet($this->zone_num) && isSet($this->phone) && isSet($this->date_reserved)){
+       if(isset($this->zone_num) && isset($this->phone) && isset($this->date_reserved)){
             
-            $user_reservation_query = sprintf(
-            "INSERT INTO RESERVATION(Confirmation_id, Zone_num, Phone, Cancelled, DATE_RESERVED, FEE)
-            VALUES($this->confirmationNumber, $this->zone_num, $this->phone, false, '$this->date_reserved', 
-            (SELECT RATE FROM ZONE z WHERE '$this->date_reserved' = z.Zone_date AND $this->zone_num = z.Zone_num)");
-            //echo ($user_reservation_query);
+            $user_reservation_query = "INSERT INTO RESERVATIONS(Confirmation_id, Zone_num, Phone, Cancelled, DATE_RESERVED, FEE) VALUES($this->confirmationNumber, $this->zone_num, $this->phone, false, '$this->date_reserved', 
+            (SELECT RATE FROM ZONES z WHERE '$this->date_reserved' = z.Zone_date AND $this->zone_num = z.Zone_num))";
+             echo $user_reservation_query;
             $b = mysqli_query($this->local_conn, $user_reservation_query);
             return $b;
        } else {
@@ -40,25 +38,24 @@ class Reservation{
 
     public function setResConfirm($confirmation_num){
         $this -> confirmationNumber = $confirmation_num;
-        $resCmd = "SELECT * FROM reservation r WHERE r.Confirmation_id = $confirmation_num";
+        $resCmd = "SELECT * FROM reservations r WHERE r.Confirmation_id = $confirmation_num";
         $result = mysqli_query($this->local_conn, $resCmd);
         if(!$result){
             die("Error in query preparation: id 47 ");
         }
         $values = $result -> fetch_array();
-        $this->date_reserved = $values['DATE_RESERVED'];
-        $this->fee = $values['FEE'];
-        $this->zone_num = $values['ZONE_NUM'];
-        $this->phone = $values['PHONE'];
+        $this->date_reserved = $values['Date_reserved'];
+        $this->fee = $values['Fee'];
+        $this->zone_num = $values['Zone_num'];
+        $this->phone = $values['Phone'];
 
     }
 
     public function cancelReservation(): bool{
-       $update_cmd =  "UPDATE RESERVATION r SET Cancelled = true 
+       $update_cmd =  "UPDATE RESERVATIONS r SET Cancelled = true 
         WHERE $this->confirmationNumber = r.Confirmation_id
-        OR $this->phone = r.Phone";
+        OR '$this->phone' = r.Phone";
 
-        echo $update_cmd;
         $result = mysqli_query($this->local_conn, $update_cmd);
        
         if(!$result){
@@ -82,7 +79,7 @@ class Reservation{
         while($count > 0){
             $this->confirmationNumber = rand(0, 2147483647);
             
-            $queryConfirmationNumber = sprintf("SELECT COUNT(*) AS count FROM RESERVATION WHERE CONFIRMATION_NUM = %d", $this->confirmationNumber);
+            $queryConfirmationNumber = sprintf("SELECT COUNT(*) AS count FROM RESERVATIONS WHERE CONFIRMATION_id = %d", $this->confirmationNumber);
             
             $result = mysqli_query($this->local_conn, $queryConfirmationNumber);
             if(!$result){

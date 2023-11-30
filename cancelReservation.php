@@ -21,11 +21,10 @@ $confirm_num;
         //$conn = new mysqli("127.0.0.1", "root", "mySQLmySQL", "ParkingReservations");
         $conn = new mysqli('127.0.0.1', 'phpuser', 'phpwd', 'cse3241_project');
         $cancel_status = false;
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (!empty($_POST['$confirm_num'])) {
+            if (!empty($_POST['confirmation_num'])) {
                 $confirm_num = $_POST['confirmation_num'];
+		echo $_POST['confirmation_num'];
             }
-        }
     ?>
     
     <div class="header-container">
