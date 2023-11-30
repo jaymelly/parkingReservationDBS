@@ -7,25 +7,29 @@ class Reservation{
     public $fee;
     public $date_reserved;
     public $confirmationNumber;
+    public $name;
     private $local_conn;
+
+    
 
 
 
     // Constructor method
-    public function __construct($zone_num, $phone, $date, $rate, $conn) {
+    public function __construct($zone_num, $phone, $date, $rate, $name, $conn) {
         $this->zone_num = $zone_num;
         $this->phone = $phone;
         $this->cancellation = false;
         $this->date_reserved = $date;
-	$this->fee = $rate;
+	    $this->fee = $rate;
+        $this->name = $name;
         $this->local_conn = $conn;
     }
 
     public function insertReservation(): bool{
-       if(isset($this->zone_num) && isset($this->phone) && isset($this->date_reserved)){
+       if(isset($this->zone_num) && isset($this->phone) && isset($this->date_reserved) && isset($this->name)){
             
-            $user_reservation_query = "INSERT INTO RESERVATIONS(Confirmation_id, Zone_num, Phone, Cancelled, DATE_RESERVED, FEE) VALUES($this->confirmationNumber, $this->zone_num, $this->phone, false, '$this->date_reserved', 
-            (SELECT RATE FROM ZONES z WHERE '$this->date_reserved' = z.Zone_date AND $this->zone_num = z.Zone_num))";
+            $user_reservation_query = "INSERT INTO RESERVATIONS(Confirmation_id, Zone_num, Phone, Cancelled, DATE_RESERVED, FEE, Name) VALUES($this->confirmationNumber, $this->zone_num, $this->phone, false, '$this->date_reserved', 
+            (SELECT RATE FROM ZONES z WHERE '$this->date_reserved' = z.Zone_date AND $this->zone_num = z.Zone_num), $this->name)";
              echo $user_reservation_query;
             $b = mysqli_query($this->local_conn, $user_reservation_query);
             return $b;
@@ -48,7 +52,7 @@ class Reservation{
         $this->fee = $values['Fee'];
         $this->zone_num = $values['Zone_num'];
         $this->phone = $values['Phone'];
-
+        $this->name = $values['Name'];
     }
 
     public function cancelReservation(): bool{
