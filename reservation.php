@@ -57,8 +57,7 @@ class Reservation{
 
     public function cancelReservation(): bool{
        $update_cmd =  "UPDATE RESERVATIONS r SET Cancelled = true 
-        WHERE $this->confirmationNumber = r.Confirmation_id
-        OR '$this->phone' = r.Phone";
+        WHERE $this->confirmationNumber = r.Confirmation_id";
 
         $result = mysqli_query($this->local_conn, $update_cmd);
        
