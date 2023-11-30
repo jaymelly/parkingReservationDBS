@@ -2,6 +2,7 @@
 include 'reservation.php';
 session_start();
 $phone;
+$name;
 ?>
 
 
@@ -23,10 +24,12 @@ $phone;
                 $_SESSION['fee']= $_POST['rate'];  
 
             }
-            if(!empty($_POST['phone'])){
+            if(!empty($_POST['phone']) && !empty($_POST['name'])){
                 $phone = $_POST['phone'];
-                $newRes = new Reservation($_SESSION['zone'], $phone, $_SESSION['date'], $_SESSION['fee'], $conn);
-		$newRes -> generateUniqueCnf();
+                $name = $_POST['name'];
+
+                $newRes = new Reservation($_SESSION['zone'], $phone, $_SESSION['date'], $_SESSION['fee'], $name, $conn);
+		        $newRes -> generateUniqueCnf();
             }
             $zone = $_SESSION['zone'];
             $fee = $_SESSION['fee'];
@@ -48,6 +51,8 @@ $phone;
     <form method="post">
         <label for="input_usr_reservation">Please Enter a Phone Number for this reservation: </label>
         <input type="text" name="phone" id="input_usr_reservation" required>
+        <label for="input_usr_reservation">Please Enter a Name for this reservation: </label>
+        <input type="text" name="name" id="input_usr_reservation" required>
 
         
 
@@ -80,15 +85,15 @@ $phone;
 
         <div>
             <button class = "button" type="submit" name="submitButton">Confirm Reservation</button>
-            <button class = "button" type="" name="goBackButton" onclick="goBack()">Go Back</button>
-            <button class = "button" type="" name="nextButton" onclick="goToNewReservations()">New Reservation</button>
+            <button class = "button" type="button" name="goBackButton" onclick="goBack()">Go Back</button>
+            <button class = "button" type="button" name="nextButton" onclick="goToNewReservations()">New Reservation</button>
         </div>
     </form>
     
     
     <script>
         function showPopup() {
-            alert("Your reservation has been Confirmed! \nPress go back to see your other reservations, or make another reservation to reserve a new spot."); 
+            alert("Your reservation has been Confirmed! \nPress go back to see your other reservations, or New Reservation to reserve anther spot."); 
         }
         function goBack() {
             window.location.href = "UserInterface.php"; 
