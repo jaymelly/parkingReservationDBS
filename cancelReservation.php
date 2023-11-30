@@ -41,6 +41,7 @@ $confirm_num;
             echo "<p class = \"sentence\"> Reservation Zone: $tempRes->zone_num </p>";
             echo "<p class = \"sentence\"> Reservation Date:  $tempRes->date_reserved </p>";
             echo "<p class = \"sentence\"> Reservation Fee:  $tempRes->fee </p>";
+            echo "<p class = \"sentence\"> Reservation Name:  $tempRes->name </p>";
             echo "<p class = \"sentence\"> Are you sure you wish to cancel? </p>";
 
             $tempRes->cancelReservation();
@@ -53,8 +54,8 @@ $confirm_num;
     <div class="button-container"> 
         <form method="post" action="userInterface.php">
             <button class = "button" type="submit" name="cancelButton" onclick="showPopup()">Confirm Cancellation</button>
-            <button class = "button" type="" name="goBackButton" onclick="goBack()">Go Back</button>
-            <button class = "button" type="" name="nextButton" onclick="goToNewReservations()">New Reservations</button>
+            <button class = "button" type="button" name="goBackButton" onclick="goBack()">Go Back</button>
+            <button class = "button" type="button" name="nextButton" onclick="goToNewReservations()">New Reservations</button>
         </form>
         
     </div>
@@ -68,13 +69,15 @@ $confirm_num;
     <script>
         function showPopup() {
             alert("Your reservation has been cancelled! \nPress go back to see your other reservations, or make a new reservation to reserve a new spot."); 
-            window.location.href = "userInterface.php";
+            //window.location.href = "userInterface.php";
         }
         function goBack() {
-            window.location.href = "userInterface.php"; 
+            window.location.href = "UserInterface.php"; 
+            return false;
         }
         function goToNewReservations() {
-            window.location.href = "userInterface.php"; 
+            window.location.href = "UserInterface.php"; 
+            return false;
         }
     </script>
 
